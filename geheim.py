@@ -9,19 +9,21 @@ PASSWORD = "Station Groningen"
 DEADLINE = "2025-07-07T07:00:00"  # JavaScript ISO format
 SPREADSHEET_ID = "1iq2tOmLCUxTLc0AW8zvdPRb0PvvWon553eAquQ_be6Q"  # Get it from the URL: https://docs.google.com/spreadsheets/d/THIS_ID/edit
 
-# Setup Google Sheets connection
 def connect_to_gsheet():
     scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-    credentials_dict = st.secrets["gcp_service_account"]
     
-    # Repair the private key back to proper format
-    credentials_dict["private_key"] = credentials_dict["private_key"].replace("\\n", "\n")
+    # Copy secrets to a new dict to allow editing
+    secrets_dict = dict(st.secrets["gcp_service_account"])
     
-    credentials = ServiceAccountCredentials.from_json_keyfile_dict(credentials_dict, scope)
+    # Fix the private key format
+    secrets_dict["private_key"] = secrets_dict["private_key"].replace("\\n", "\n")
+    
+    credentials = ServiceAccountCredentials.from_json_keyfile_dict(secrets_dict, scope)
     gc = gspread.authorize(credentials)
     sh = gc.open_by_key(SPREADSHEET_ID)
     worksheet = sh.sheet1
     return worksheet
+
 
 
 # Streamlit App
