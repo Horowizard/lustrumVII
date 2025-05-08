@@ -13,11 +13,16 @@ SPREADSHEET_ID = "1iq2tOmLCUxTLc0AW8zvdPRb0PvvWon553eAquQ_be6Q"  # Get it from t
 def connect_to_gsheet():
     scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
     credentials_dict = st.secrets["gcp_service_account"]
+    
+    # Repair the private key back to proper format
+    credentials_dict["private_key"] = credentials_dict["private_key"].replace("\\n", "\n")
+    
     credentials = ServiceAccountCredentials.from_json_keyfile_dict(credentials_dict, scope)
     gc = gspread.authorize(credentials)
     sh = gc.open_by_key(SPREADSHEET_ID)
-    worksheet = sh.sheet1  # use the first sheet
+    worksheet = sh.sheet1
     return worksheet
+
 
 # Streamlit App
 st.title("Senaat der Senaten")
