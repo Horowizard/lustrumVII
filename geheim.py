@@ -32,16 +32,16 @@ st.title("Senaat der Senaten")
 # JavaScript live countdown
 st.subheader("Dichterbij dan je denkt...")
 st.components.v1.html(f"""
-<div style="overflow-x: auto; width: 100%;">
+<div style="width: 100%; display: flex; justify-content: center; align-items: center;">
     <div id="countdown" style="
-        font-size: 48px;
+        font-size: 6vw;
+        max-width: 90%;
         font-family: 'Palace Script MT', cursive;
         color: navy;
         text-align: center;
         font-weight: bold;
-        white-space: nowrap;
-        padding: 20px;
-        min-width: 600px;
+        word-wrap: break-word;
+        line-height: 1.2;
     "></div>
 </div>
 <script>
@@ -64,6 +64,7 @@ var x = setInterval(function() {{
 }}, 1000);
 </script>
 """, height=150)
+
 
 
 # Riddle input
