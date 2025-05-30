@@ -2,39 +2,33 @@ import streamlit as st
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from datetime import datetime
-import os
 
-# Constants
-PASSWORD = "grof ruim ongenorm"
-DEADLINE = "2025-07-07T20:00:00"  # JavaScript ISO format
-SPREADSHEET_ID = "1iq2tOmLCUxTLc0AW8zvdPRb0PvvWon553eAquQ_be6Q"  # Get it from the URL: https://docs.google.com/spreadsheets/d/THIS_ID/edit
+# Load secrets and texts
+PASSWORD = st.secrets["PASSWORD"]
+SPREADSHEET_ID = st.secrets["SPREADSHEET_ID"]
+TEXTS = st.secrets["texts"]
+DEADLINE = "2025-07-07T20:00:00"
 
 def connect_to_gsheet():
     scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-    
-    # Copy secrets to a new dict to allow editing
     secrets_dict = dict(st.secrets["gcp_service_account"])
-    
-    # Fix the private key format
     secrets_dict["private_key"] = secrets_dict["private_key"].replace("\\n", "\n")
-    
     credentials = ServiceAccountCredentials.from_json_keyfile_dict(secrets_dict, scope)
     gc = gspread.authorize(credentials)
     sh = gc.open_by_key(SPREADSHEET_ID)
-    worksheet = sh.sheet1
-    return worksheet
+    return sh.sheet1
 
+# Force light theme (done via config, see below)
 
-
-# Streamlit App
+# UI
 st.title("Senaat der Senaten")
 
-# JavaScript live countdown
+# Countdown
 st.subheader("Dichterbij dan je denkt...")
 st.components.v1.html(f"""
 <div style="width: 100%; display: flex; justify-content: center; align-items: center;">
     <div id="countdown" style="
-        font-size: 10vw;
+        font-size: 6vw;
         max-width: 90%;
         font-family: 'Palace Script MT', cursive;
         color: navy;
@@ -65,8 +59,6 @@ var x = setInterval(function() {{
 </script>
 """, height=150)
 
-
-
 # Riddle input
 st.write("Als je interesse hebt in de Senaat der Senaten, voer dan het goede antwoord in:")
 
@@ -74,16 +66,15 @@ password_input = st.text_input("Antwoord:", type="password")
 
 if password_input:
     if password_input.strip() == PASSWORD:
-        st.success("Was ook niet heel moeilijk... Voer je naam in om te laten zien dat je interesse hebt:")
-        name_input = st.text_input("Jouw naam:")
+        st.success(TEXTS["intro"])
+        name_input = st.text_input(TEXTS["label"])
 
-        if st.button("Verzend"):
+        if st.button(TEXTS["button"]):
             if name_input.strip():
                 worksheet = connect_to_gsheet()
-                # Append to Google Sheet
                 worksheet.append_row([datetime.now().strftime("%Y-%m-%d %H:%M:%S"), name_input.strip()])
-                st.success("Je naam is opgeslagen!")
+                st.success(TEXTS["success"])
             else:
-                st.error("Vul alsjeblieft je naam in voordat je verzendt.")
+                st.error(TEXTS["error"])
     else:
         st.error("Ongeldig antwoord. Probeer opnieuw.")
