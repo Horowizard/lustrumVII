@@ -4,8 +4,8 @@ from oauth2client.service_account import ServiceAccountCredentials
 from datetime import datetime
 
 # Load secrets and texts
-PASSWORD = st.secrets["PASSWORD"]
-SPREADSHEET_ID = st.secrets["SPREADSHEET_ID"]
+PASSWORD = st.secrets["app"]["PASSWORD"]
+SPREADSHEET_ID = st.secrets["app"]["SPREADSHEET_ID"]
 TEXTS = st.secrets["texts"]
 DEADLINE = "2025-07-07T20:00:00"
 
