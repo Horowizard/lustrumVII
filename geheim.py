@@ -5,8 +5,8 @@ from datetime import datetime
 import os
 
 # Constants
-PASSWORD = "Station Groningen"
-DEADLINE = "2025-07-07T07:00:00"  # JavaScript ISO format
+PASSWORD = "grof ruim ongenorm"
+DEADLINE = "2025-07-07T20:00:00"  # JavaScript ISO format
 SPREADSHEET_ID = "1iq2tOmLCUxTLc0AW8zvdPRb0PvvWon553eAquQ_be6Q"  # Get it from the URL: https://docs.google.com/spreadsheets/d/THIS_ID/edit
 
 def connect_to_gsheet():
@@ -30,16 +30,20 @@ def connect_to_gsheet():
 st.title("Senaat der Senaten")
 
 # JavaScript live countdown
-st.subheader("Countdown tot 7 juli 2025 07:00")
+st.subheader("Dichterbij dan je denkt...")
 st.components.v1.html(f"""
-<div id="countdown" style="
-    font-size: 48px;
-    font-family: 'Palace Script MT', cursive;
-    color: navy;
-    text-align: center;
-    margin-top: 20px;
-    font-weight: bold;
-"></div>
+<div style="overflow-x: auto; width: 100%;">
+    <div id="countdown" style="
+        font-size: 48px;
+        font-family: 'Palace Script MT', cursive;
+        color: navy;
+        text-align: center;
+        font-weight: bold;
+        white-space: nowrap;
+        padding: 20px;
+        min-width: 600px;
+    "></div>
+</div>
 <script>
 var deadline = new Date("{DEADLINE}").getTime();
 var x = setInterval(function() {{
@@ -60,6 +64,7 @@ var x = setInterval(function() {{
 }}, 1000);
 </script>
 """, height=150)
+
 
 # Riddle input
 st.write("Als je interesse hebt in de Senaat der Senaten, voer dan het goede antwoord in:")
