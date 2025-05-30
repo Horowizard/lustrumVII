@@ -2,12 +2,24 @@ import streamlit as st
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from datetime import datetime
+import pytz
 
 # Load secrets and texts
 PASSWORD = st.secrets["app"]["PASSWORD"]
 SPREADSHEET_ID = st.secrets["app"]["SPREADSHEET_ID"]
 TEXTS = st.secrets["texts"]
-DEADLINE = "2025-07-07T20:00:00"
+
+# Define the Amsterdam timezone
+amsterdam = pytz.timezone("Europe/Amsterdam")
+
+# Create a datetime object in Amsterdam time
+target_amsterdam_time = amsterdam.localize(datetime(2025, 7, 7, 19, 0, 0))
+
+# Convert to UTC
+target_utc_time = target_amsterdam_time.astimezone(pytz.utc)
+
+# Use this UTC time as the countdown target
+DEADLINE = target_utc_time.isoformat()
 
 def connect_to_gsheet():
     scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
@@ -17,8 +29,6 @@ def connect_to_gsheet():
     gc = gspread.authorize(credentials)
     sh = gc.open_by_key(SPREADSHEET_ID)
     return sh.sheet1
-
-# Force light theme (done via config, see below)
 
 # UI
 st.title("Senaat der Senaten")
