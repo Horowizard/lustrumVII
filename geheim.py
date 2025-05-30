@@ -34,7 +34,7 @@ st.subheader("Dichterbij dan je denkt...")
 st.components.v1.html(f"""
 <div style="width: 100%; display: flex; justify-content: center; align-items: center;">
     <div id="countdown" style="
-        font-size: 6vw;
+        font-size: 10vw;
         max-width: 90%;
         font-family: 'Palace Script MT', cursive;
         color: navy;
