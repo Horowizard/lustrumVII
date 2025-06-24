@@ -40,15 +40,15 @@ def connect_to_gsheet():
     secrets_dict = dict(st.secrets["gcp_service_account"])
     
     # Debug: show escaped private key (for troubleshooting only, remove in production)
-    st.write("Raw private key string (escaped):")
-    st.code(repr(secrets_dict["private_key"]))  # shows string with \\n
+    #st.write("Raw private key string (escaped):")
+    #st.code(repr(secrets_dict["private_key"]))  # shows string with \\n
 
     # Fix newlines (convert escaped \\n to real newlines \n)
     secrets_dict["private_key"] = secrets_dict["private_key"].replace("\\n", "\n")
 
     # Debug: show fixed key (again, only for testing)
-    st.write("Parsed private key string:")
-    st.code(secrets_dict["private_key"])  # shows string with actual newlines
+    #st.write("Parsed private key string:")
+    #st.code(secrets_dict["private_key"])  # shows string with actual newlines
 
     # Authenticate
     credentials = ServiceAccountCredentials.from_json_keyfile_dict(secrets_dict, scope)
