@@ -70,7 +70,7 @@ var x = setInterval(function() {{
 """, height=150)
 
 # Riddle input
-st.write("Als je interesse hebt in de Senaat der Senaten, voer dan het goede antwoord in:")
+st.write("Als je interesse hebt in de Senaat der Senaten, voer dan het goede antwoord in (let op: er blijven 2 letters over, een 'o' en een 'n':")
 
 password_input = st.text_input("Antwoord:", type="password")
 
