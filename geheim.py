@@ -21,11 +21,36 @@ target_utc_time = target_amsterdam_time.astimezone(pytz.utc)
 # Use this UTC time as the countdown target
 DEADLINE = target_utc_time.isoformat()
 
+# def connect_to_gsheet():
+#     scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+#     secrets_dict = dict(st.secrets["gcp_service_account"])
+#     st.write(repr(st.secrets["gcp_service_account"]["private_key"]))
+#     secrets_dict["private_key"] = secrets_dict["private_key"].replace("\\n", "\n")
+#     credentials = ServiceAccountCredentials.from_json_keyfile_dict(secrets_dict, scope)
+#     gc = gspread.authorize(credentials)
+#     sh = gc.open_by_key(SPREADSHEET_ID)
+#     return sh.sheet1
+
 def connect_to_gsheet():
-    scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+    scope = [
+        "https://spreadsheets.google.com/feeds",
+        "https://www.googleapis.com/auth/drive"
+    ]
+    
     secrets_dict = dict(st.secrets["gcp_service_account"])
-    st.write(repr(st.secrets["gcp_service_account"]["private_key"]))
-    #secrets_dict["private_key"] = secrets_dict["private_key"].replace("\\n", "\n")
+    
+    # Debug: show escaped private key (for troubleshooting only, remove in production)
+    st.write("Raw private key string (escaped):")
+    st.code(repr(secrets_dict["private_key"]))  # shows string with \\n
+
+    # Fix newlines (convert escaped \\n to real newlines \n)
+    secrets_dict["private_key"] = secrets_dict["private_key"].replace("\\n", "\n")
+
+    # Debug: show fixed key (again, only for testing)
+    st.write("Parsed private key string:")
+    st.code(secrets_dict["private_key"])  # shows string with actual newlines
+
+    # Authenticate
     credentials = ServiceAccountCredentials.from_json_keyfile_dict(secrets_dict, scope)
     gc = gspread.authorize(credentials)
     sh = gc.open_by_key(SPREADSHEET_ID)
