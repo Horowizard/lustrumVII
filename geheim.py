@@ -24,7 +24,8 @@ DEADLINE = target_utc_time.isoformat()
 def connect_to_gsheet():
     scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
     secrets_dict = dict(st.secrets["gcp_service_account"])
-    secrets_dict["private_key"] = secrets_dict["private_key"].replace("\\n", "\n")
+    st.write(repr(st.secrets["gcp_service_account"]["private_key"]))
+    #secrets_dict["private_key"] = secrets_dict["private_key"].replace("\\n", "\n")
     credentials = ServiceAccountCredentials.from_json_keyfile_dict(secrets_dict, scope)
     gc = gspread.authorize(credentials)
     sh = gc.open_by_key(SPREADSHEET_ID)
